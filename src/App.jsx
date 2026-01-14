@@ -31,7 +31,7 @@ const personalInfo = {
   title: "Full Stack Engineer & Cyber Security Specialist",
   location: "Pakistan",
   email: "mailbilalkhan9@gmail.com",
-  linkedin: "linkedin.com/in/bilalahmad-khan/",
+  linkedin: "https://www.linkedin.com/in/bilalahmad-khan/",
   phone: "0321-5736383"
 };
 
