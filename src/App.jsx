@@ -429,8 +429,8 @@ export default function Portfolio() {
 
         {/* TOP: ABOUT ME (Clean Split) */}
         <section className="absolute top-[-100vh] left-0 w-screen h-screen bg-white flex items-center justify-center overflow-hidden">
-            <div className="w-full h-full overflow-y-auto p-8 pt-24 pb-24 flex items-center justify-center">
-                <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-12 gap-12 items-start border-l border-zinc-100 pl-4 md:pl-8">
+            <div className="w-full h-full overflow-y-auto p-8 pt-24 pb-24">
+                <div className="max-w-5xl w-full mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 items-start border-l border-zinc-100 pl-4 md:pl-8">
                     
                     {/* Left Column: Title & Bio */}
                     <div className="md:col-span-5 space-y-8">
@@ -556,7 +556,7 @@ export default function Portfolio() {
             <div className="w-full h-full overflow-y-auto p-8 pt-24 pb-24 flex justify-center relative z-10">
                 <div className="w-full max-w-6xl">
                     
-                    <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-zinc-800 pb-6 gap-6">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 border-b border-zinc-800 pb-6 gap-6">
                         <div>
                              <span className="font-mono text-xs text-zinc-500 uppercase tracking-widest">04 / Portfolio</span>
                              <h2 className="text-3xl font-bold text-white mt-2 flex items-center gap-3">Selected Works <Cpu className="text-zinc-600"/></h2>
