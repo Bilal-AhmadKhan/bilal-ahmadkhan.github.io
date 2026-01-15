@@ -1,28 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  ArrowUp, 
-  ArrowDown, 
-  ArrowLeft, 
-  ArrowRight, 
-  Home, 
-  Linkedin, 
-  Mail, 
-  Smartphone, 
-  Shield, 
-  Bot, 
-  Cpu,
-  Award,
-  BookOpen,
-  User,
-  MapPin,
-  Trophy,
-  Scroll,
-  Cloud,
-  ChevronUp,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  ExternalLink
+  ArrowUp, ArrowDown, ArrowLeft, ArrowRight, 
+  Linkedin, Mail, Smartphone, Shield, Bot, Cpu,
+  Award, BookOpen, MapPin, Trophy, Scroll,
+  ChevronUp, ChevronDown, ChevronLeft, ChevronRight,
+  ExternalLink, Terminal, Hash, Circle
 } from 'lucide-react';
 
 // --- DATA CONFIGURATION ---
@@ -124,71 +106,103 @@ const projectsData = {
   ]
 };
 
-// --- COMPONENTS ---
-
-// Updated EdgeTrigger: Shows Icon initially, Swaps to Text + Glow on Hover
+// --- COMPONENT: MAGNETIC STRIP TRIGGER ---
 const EdgeTrigger = ({ direction, target, navigate, label, icon: Icon, isHome }) => {
-  // Base Container
-  let containerClass = "fixed z-50 flex items-center justify-center cursor-pointer group transition-all duration-500";
-  
-  // The Edge Glow (Invisible until hover)
-  let gradientClass = "absolute inset-0 transition-opacity duration-500 opacity-0 group-hover:opacity-100 pointer-events-none";
-  
-  // The Icon (Visible initially, fades out on hover)
-  let iconContainerClass = "absolute transition-all duration-500 transform opacity-70 group-hover:opacity-0 group-hover:scale-150 text-slate-400";
-  
-  // The Text (Invisible initially, fades in on hover)
-  let textClass = "relative opacity-0 group-hover:opacity-100 transition-all duration-500 font-bold tracking-[0.2em] text-sm uppercase text-white shadow-black drop-shadow-md whitespace-nowrap";
+  let containerClass = "fixed z-50 flex items-center justify-center cursor-pointer group";
+  let stripClass = "absolute bg-zinc-800 transition-all duration-300 ease-out group-hover:bg-zinc-900";
+  let iconClass = "relative z-10 transition-all duration-300 text-zinc-400 group-hover:text-white group-hover:scale-110";
+  let labelClass = "absolute text-xs font-mono uppercase tracking-widest text-zinc-500 group-hover:text-zinc-900 transition-all duration-300 opacity-0 group-hover:opacity-100 bg-white px-2 py-1 border border-zinc-200";
 
-  // Dimensions & Directions
   if (direction === 'top') {
-    containerClass += " top-0 left-0 w-full h-24 bg-gradient-to-b from-transparent to-transparent"; // Large Hitbox
-    gradientClass += " bg-gradient-to-b from-teal-500/50 to-transparent";
-    // Text stays horizontal
+    containerClass += " top-0 left-0 w-full h-16"; 
+    stripClass += " top-0 w-32 h-1 group-hover:h-12 group-hover:w-48 rounded-b-lg";
+    labelClass += " top-14";
   } else if (direction === 'bottom') {
-    containerClass += " bottom-0 left-0 w-full h-24 bg-gradient-to-t from-transparent to-transparent";
-    gradientClass += " bg-gradient-to-t from-teal-500/50 to-transparent";
-    // Text stays horizontal
+    containerClass += " bottom-0 left-0 w-full h-16";
+    stripClass += " bottom-0 w-32 h-1 group-hover:h-12 group-hover:w-48 rounded-t-lg";
+    labelClass += " bottom-14";
   } else if (direction === 'left') {
-    containerClass += " top-0 left-0 h-full w-24 bg-gradient-to-r from-transparent to-transparent";
-    gradientClass += " bg-gradient-to-r from-teal-500/50 to-transparent";
-    textClass += " [writing-mode:vertical-rl] rotate-180"; // Vertical Text
+    containerClass += " top-0 left-0 h-full w-16";
+    stripClass += " left-0 h-32 w-1 group-hover:w-12 group-hover:h-48 rounded-r-lg";
+    labelClass += " left-14 whitespace-nowrap";
   } else if (direction === 'right') {
-    containerClass += " top-0 right-0 h-full w-24 bg-gradient-to-l from-transparent to-transparent";
-    gradientClass += " bg-gradient-to-l from-teal-500/50 to-transparent";
-    textClass += " [writing-mode:vertical-rl] rotate-180"; // Vertical Text
+    containerClass += " top-0 right-0 h-full w-16";
+    stripClass += " right-0 h-32 w-1 group-hover:w-12 group-hover:h-48 rounded-l-lg";
+    labelClass += " right-14 whitespace-nowrap";
   }
 
   return (
     <div className={containerClass} onClick={() => navigate(target)}>
-      {/* The Glow Effect */}
-      <div className={gradientClass}></div>
-      
-      {/* The Icon (Fades Out) */}
-      <div className={iconContainerClass}>
-         <Icon size={32} className="animate-pulse-slow" />
+      <div className={stripClass}></div>
+      <div className={iconClass}>
+         <Icon size={20} />
       </div>
-
-      {/* The Text (Fades In) */}
-      <div className={textClass}>
-        {label}
-      </div>
+      <div className={labelClass}>{label}</div>
     </div>
   );
 };
 
+// --- COMPONENT: NAV CONTROL HUB ---
+const NavigationRemote = ({ navigate }) => {
+  return (
+    <div className="relative w-40 h-40 rounded-full bg-zinc-100 shadow-xl border border-zinc-200 flex items-center justify-center group select-none">
+       {/* Decorative outer ring */}
+       <div className="absolute inset-2 rounded-full border border-zinc-300/50"></div>
+       
+       {/* Cross Lines */}
+       <div className="absolute w-full h-[1px] bg-zinc-200"></div>
+       <div className="absolute h-full w-[1px] bg-zinc-200"></div>
+
+       {/* Label */}
+       <div className="absolute -top-6 text-[10px] font-mono text-zinc-400 tracking-widest uppercase">Nav Control</div>
+
+       {/* Buttons */}
+       <button 
+         onClick={() => navigate('about')} 
+         className="absolute top-2 w-10 h-10 bg-white rounded-full shadow-sm border border-zinc-200 flex items-center justify-center hover:bg-zinc-900 hover:text-white transition-all hover:scale-110 hover:shadow-md z-10 active:scale-95"
+         title="About Me (Up)"
+       >
+         <ChevronUp size={20} />
+       </button>
+       <button 
+         onClick={() => navigate('contact')} 
+         className="absolute bottom-2 w-10 h-10 bg-white rounded-full shadow-sm border border-zinc-200 flex items-center justify-center hover:bg-zinc-900 hover:text-white transition-all hover:scale-110 hover:shadow-md z-10 active:scale-95"
+         title="Contact (Down)"
+       >
+         <ChevronDown size={20} />
+       </button>
+       <button 
+         onClick={() => navigate('cert')} 
+         className="absolute left-2 w-10 h-10 bg-white rounded-full shadow-sm border border-zinc-200 flex items-center justify-center hover:bg-zinc-900 hover:text-white transition-all hover:scale-110 hover:shadow-md z-10 active:scale-95"
+         title="Education (Left)"
+       >
+         <ChevronLeft size={20} />
+       </button>
+       <button 
+         onClick={() => navigate('projects')} 
+         className="absolute right-2 w-10 h-10 bg-white rounded-full shadow-sm border border-zinc-200 flex items-center justify-center hover:bg-zinc-900 hover:text-white transition-all hover:scale-110 hover:shadow-md z-10 active:scale-95"
+         title="Projects (Right)"
+       >
+         <ChevronRight size={20} />
+       </button>
+
+       {/* Center Hub */}
+       <div className="relative z-20 w-12 h-12 rounded-full bg-zinc-200 flex items-center justify-center shadow-inner">
+          <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse"></div>
+       </div>
+    </div>
+  )
+}
 
 export default function Portfolio() {
-  // View State: 'home', 'about' (up), 'contact' (down), 'cert' (left), 'projects' (right)
   const [view, setView] = useState('home');
   const [activeProjectTab, setActiveProjectTab] = useState('mobile');
 
-  // Touch State for Swipe
+  // Swipe Logic
   const touchStart = useRef(null);
   const touchEnd = useRef(null);
   const minSwipeDistance = 50;
 
-  // Handle Swipe Gestures
   const onTouchStart = (e) => {
     touchEnd.current = null; 
     touchStart.current = e.targetTouches[0].clientX;
@@ -202,65 +216,46 @@ export default function Portfolio() {
 
   const onTouchEnd = () => {
     if (!touchStart.current || !touchEnd.current) return;
-    
     const distanceX = touchStart.current - touchEnd.current;
     const distanceY = touchStart.currentY - touchEnd.currentY;
     const isHorizontal = Math.abs(distanceX) > Math.abs(distanceY);
 
     if (isHorizontal) {
       if (Math.abs(distanceX) < minSwipeDistance) return;
-      if (distanceX > 0) { // Swiped Left -> Go Right
+      if (distanceX > 0) { // Swiped Left
         if (view === 'home') setView('projects');
         else if (view === 'cert') setView('home');
-      } else { // Swiped Right -> Go Left
+      } else { // Swiped Right
         if (view === 'home') setView('cert');
         else if (view === 'projects') setView('home');
       }
     } else {
       if (Math.abs(distanceY) < minSwipeDistance) return;
-      if (distanceY > 0) { // Swiped Up -> Go Down
+      if (distanceY > 0) { // Swiped Up
         if (view === 'home') setView('contact');
         else if (view === 'about') setView('home');
-      } else { // Swiped Down -> Go Up
+      } else { // Swiped Down
         if (view === 'home') setView('about');
         else if (view === 'contact') setView('home');
       }
     }
   };
 
-  // Handle Keyboard Navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
       switch (e.key) {
-        case 'ArrowUp':
-          if (view === 'home') setView('about');
-          else if (view === 'contact') setView('home');
-          break;
-        case 'ArrowDown':
-          if (view === 'home') setView('contact');
-          else if (view === 'about') setView('home');
-          break;
-        case 'ArrowLeft':
-          if (view === 'home') setView('cert');
-          else if (view === 'projects') setView('home');
-          break;
-        case 'ArrowRight':
-          if (view === 'home') setView('projects');
-          else if (view === 'cert') setView('home');
-          break;
-        case 'Escape':
-          setView('home');
-          break;
-        default:
-          break;
+        case 'ArrowUp': view === 'home' ? setView('about') : view === 'contact' && setView('home'); break;
+        case 'ArrowDown': view === 'home' ? setView('contact') : view === 'about' && setView('home'); break;
+        case 'ArrowLeft': view === 'home' ? setView('cert') : view === 'projects' && setView('home'); break;
+        case 'ArrowRight': view === 'home' ? setView('projects') : view === 'cert' && setView('home'); break;
+        case 'Escape': setView('home'); break;
+        default: break;
       }
     };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [view]);
 
-  // Calculate transform for the "World" container
   const getTransform = () => {
     switch (view) {
       case 'home': return 'translate(0, 0)';
@@ -274,349 +269,262 @@ export default function Portfolio() {
 
   const navigate = (target) => setView(target);
 
+  // Background Pattern Style (Dot Grid)
+  const bgPattern = {
+    backgroundImage: 'radial-gradient(#3f3f46 1px, transparent 1px)',
+    backgroundSize: '24px 24px',
+    maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)'
+  };
+
   return (
     <div 
-      className="fixed inset-0 bg-[#020617] text-slate-200 overflow-hidden font-sans selection:bg-teal-500 selection:text-white"
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
+      className="fixed inset-0 bg-zinc-50 text-zinc-900 overflow-hidden font-sans selection:bg-zinc-900 selection:text-white"
+      onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}
     >
+      {/* Background Texture - Consistent across all views */}
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03] bg-zinc-950" style={bgPattern}></div>
+      <div className="absolute inset-0 z-0 pointer-events-none mix-blend-multiply opacity-5" style={{backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`}}></div>
+
+      {/* --- NAVIGATION TRIGGERS --- */}
+      {view === 'home' && <EdgeTrigger direction="top" target="about" navigate={navigate} label="About" icon={ChevronUp} />}
+      {view === 'contact' && <EdgeTrigger direction="top" target="home" navigate={navigate} label="Home" icon={ChevronUp} />}
       
-      {/* --- EDGE NAVIGATION TRIGGERS --- */}
+      {view === 'home' && <EdgeTrigger direction="bottom" target="contact" navigate={navigate} label="Contact" icon={ChevronDown} />}
+      {view === 'about' && <EdgeTrigger direction="bottom" target="home" navigate={navigate} label="Home" icon={ChevronDown} />}
       
-      {/* TOP EDGE */}
-      {view === 'home' && (
-        <EdgeTrigger direction="top" target="about" navigate={navigate} label="About Me" icon={ChevronUp} isHome={true} />
-      )}
-      {view === 'contact' && (
-        <EdgeTrigger direction="top" target="home" navigate={navigate} label="Back Home" icon={ChevronUp} isHome={false} />
-      )}
+      {view === 'home' && <EdgeTrigger direction="left" target="cert" navigate={navigate} label="Education" icon={ChevronLeft} />}
+      {view === 'projects' && <EdgeTrigger direction="left" target="home" navigate={navigate} label="Home" icon={ChevronLeft} />}
+      
+      {view === 'home' && <EdgeTrigger direction="right" target="projects" navigate={navigate} label="Work" icon={ChevronRight} />}
+      {view === 'cert' && <EdgeTrigger direction="right" target="home" navigate={navigate} label="Home" icon={ChevronRight} />}
 
-      {/* BOTTOM EDGE */}
-      {view === 'home' && (
-        <EdgeTrigger direction="bottom" target="contact" navigate={navigate} label="Contact Me" icon={ChevronDown} isHome={true} />
-      )}
-      {view === 'about' && (
-        <EdgeTrigger direction="bottom" target="home" navigate={navigate} label="Back Home" icon={ChevronDown} isHome={false} />
-      )}
-
-      {/* LEFT EDGE */}
-      {view === 'home' && (
-        <EdgeTrigger direction="left" target="cert" navigate={navigate} label="Education & Certification" icon={ChevronLeft} isHome={true} />
-      )}
-      {view === 'projects' && (
-        <EdgeTrigger direction="left" target="home" navigate={navigate} label="Back Home" icon={ChevronLeft} isHome={false} />
-      )}
-
-      {/* RIGHT EDGE */}
-      {view === 'home' && (
-        <EdgeTrigger direction="right" target="projects" navigate={navigate} label="Experience & Projects" icon={ChevronRight} isHome={true} />
-      )}
-      {view === 'cert' && (
-        <EdgeTrigger direction="right" target="home" navigate={navigate} label="Back Home" icon={ChevronRight} isHome={false} />
-      )}
-
-
-      {/* --- THE WORLD CONTAINER --- */}
+      {/* --- MAIN WORLD CONTAINER --- */}
       <div 
-        className="absolute inset-0 transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] w-full h-full z-10 will-change-transform"
+        className="absolute inset-0 transition-transform duration-700 cubic-bezier(0.16, 1, 0.3, 1) w-full h-full z-10 will-change-transform"
         style={{ transform: getTransform() }}
       >
         
-        {/* CENTER: HOME (Deep Space Grey) */}
-        <section className="absolute inset-0 w-screen h-screen flex flex-col items-center justify-center p-8 bg-[#020617]">
-          {/* Star Field Effect */}
-          <div className="absolute inset-0 z-0 opacity-40 pointer-events-none" 
-             style={{ 
-               backgroundImage: 'radial-gradient(white 1px, transparent 1px)',
-               backgroundSize: '50px 50px'
-             }}>
-          </div>
-          <div className="absolute inset-0 z-0 opacity-20 pointer-events-none" 
-             style={{ 
-               backgroundImage: 'radial-gradient(white 2px, transparent 2px)',
-               backgroundSize: '120px 120px',
-               backgroundPosition: '20px 20px'
-             }}>
-          </div>
-
-          <div className="relative z-10 text-center space-y-6 max-w-3xl animate-fade-in-up">
-            <div className="inline-block p-4 rounded-full bg-slate-900/50 border border-slate-700 backdrop-blur-sm shadow-2xl animate-pulse-slow mb-4">
-              <Shield size={48} className="text-teal-400" />
+        {/* CENTER: HOME (Minimalist Core) */}
+        <section className="absolute inset-0 w-screen h-screen flex flex-col items-center justify-center p-8">
+          <div className="relative z-10 text-center space-y-8 max-w-4xl w-full flex flex-col items-center">
+            
+            {/* Text Content */}
+            <div className="space-y-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-200 bg-white text-xs font-mono text-zinc-500 mb-4">
+                    <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    SYSTEM ONLINE
+                </div>
+                <h1 className="text-6xl md:text-8xl font-bold tracking-tighter text-zinc-900">
+                BILAL KHAN
+                </h1>
+                <p className="text-xl md:text-2xl text-zinc-500 font-light tracking-wide max-w-2xl mx-auto">
+                <span className="font-semibold text-zinc-800">Full Stack Engineer</span> <span className="text-zinc-300 px-2">/</span> Cyber Security
+                </p>
             </div>
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-white">
-              BILAL <span className="text-teal-500">KHAN</span>
-            </h1>
-            <p className="text-xl text-slate-400 font-light tracking-wide">
-              {personalInfo.title}
-            </p>
-            <div className="flex gap-4 justify-center pt-4">
-              <a href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-slate-800/50 rounded-full hover:bg-slate-800 transition-colors cursor-pointer text-sm text-slate-300">
-                 <Linkedin size={16}/> LinkedIn
+
+            <div className="flex gap-4 justify-center pt-8">
+              <a href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 px-6 py-3 bg-zinc-900 text-white hover:bg-zinc-700 transition-all text-sm font-medium tracking-wide">
+                 <Linkedin size={16}/> <span>LINKEDIN</span>
               </a>
-              <a href={`mailto:${personalInfo.email}`} className="flex items-center gap-2 px-4 py-2 bg-slate-800/50 rounded-full hover:bg-slate-800 transition-colors cursor-pointer text-sm text-slate-300">
-                 <Mail size={16}/> Contact
+              <a href={`mailto:${personalInfo.email}`} className="group flex items-center gap-3 px-6 py-3 bg-white border border-zinc-200 hover:border-zinc-900 transition-all text-sm font-medium text-zinc-900 tracking-wide">
+                 <Mail size={16}/> <span>EMAIL</span>
               </a>
             </div>
-          </div>
-          
-          {/* Decorative Lines */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200vw] h-[1px] bg-slate-800/50 -z-10"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1px] h-[200vh] bg-slate-800/50 -z-10"></div>
-        </section>
 
-        {/* TOP: ABOUT ME (Pixel Sky) - Scrollable */}
-        <section className="absolute top-[-100vh] left-0 w-screen h-screen flex items-center justify-center bg-gradient-to-b from-[#38bdf8] via-[#818cf8] to-[#020617] overflow-hidden">
-          {/* Pixel Clouds */}
-          <div className="absolute top-20 left-20 text-white/20 animate-pulse pointer-events-none"><Cloud size={100} /></div>
-          <div className="absolute top-40 right-40 text-white/10 pointer-events-none"><Cloud size={140} /></div>
-          <div className="absolute bottom-1/3 left-1/3 text-white/10 pointer-events-none"><Cloud size={80} /></div>
-
-          {/* Scrollable Container */}
-          <div className="w-full h-full overflow-y-auto custom-scrollbar p-8 md:p-20 pt-20 pb-20 flex items-center justify-center">
-            <div className="relative z-10 max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center min-h-min">
-              <div className="space-y-6">
-                <div className="flex items-center gap-3 text-white mb-2">
-                  <User size={28} />
-                  <h2 className="text-4xl font-bold text-white tracking-widest uppercase drop-shadow-md">About Me</h2>
-                </div>
-                <div className="bg-white/10 backdrop-blur-md p-6 rounded-xl border border-white/20 shadow-xl text-white">
-                  <p className="leading-relaxed text-lg mb-4">
-                    I specialize in building secure, intelligent systems. From <span className="font-bold text-teal-200">Flutter</span> mobile apps to <span className="font-bold text-teal-200">AI Agents</span> that detect misinformation, my work focuses on real-world impact.
-                  </p>
-                  <p className="leading-relaxed">
-                    With a strong background in Ethical Hacking and Math, I approach development with a security-first mindset, ensuring data privacy and robust architecture in every project.
-                  </p>
-                </div>
-                
-                <div className="pt-4 flex items-center gap-4 text-sm text-blue-100 font-medium">
-                  <div className="flex items-center gap-2">
-                    <MapPin size={16} /> {personalInfo.location}
-                  </div>
-                  <div className="w-1 h-1 bg-blue-200 rounded-full"></div>
-                  <div>Available for Remote Work</div>
-                </div>
-              </div>
-              
-              <div className="bg-black/30 p-8 rounded-2xl border border-white/10 shadow-2xl relative overflow-hidden backdrop-blur-md">
-                 <h3 className="text-xl font-bold text-white mb-6 border-b border-white/20 pb-2">Technical Arsenal</h3>
-                 <div className="flex flex-wrap gap-2">
-                   {skills.map((skill, i) => (
-                     <span key={i} className="px-3 py-1 bg-black/40 text-teal-300 font-mono text-sm rounded border border-teal-500/30 hover:bg-teal-500/20 transition-colors cursor-default">
-                       {skill}
-                     </span>
-                   ))}
-                 </div>
-              </div>
+            {/* Remote Control Container */}
+            <div className="w-full flex justify-center md:justify-end mt-12 md:mt-16 md:pr-12 pt-6 md:pt-6">
+               <NavigationRemote navigate={navigate} />
             </div>
+
           </div>
         </section>
 
-        {/* BOTTOM: CONTACT - Scrollable */}
-        <section className="absolute top-[100vh] left-0 w-screen h-screen flex items-center justify-center bg-[#0f172a] overflow-hidden">
-           {/* Scrollable Container */}
-           <div className="w-full h-full overflow-y-auto custom-scrollbar p-8 pt-20 pb-20 flex items-center justify-center">
-             <div className="max-w-2xl w-full text-center space-y-10 min-h-min">
-              <div className="inline-block p-4 rounded-full bg-slate-800 border border-slate-700 mb-4 shadow-lg shadow-teal-900/20">
-                <Mail size={40} className="text-teal-400" />
-              </div>
-              
-              <h2 className="text-4xl font-bold text-white">Let's Collaborate</h2>
-              <p className="text-slate-400 text-lg">
-                Open to opportunities in App Development, AI Automation, or Cybersecurity.
-              </p>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-lg mx-auto">
-                <a href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 p-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl transition-all group">
-                  <Linkedin size={20} className="text-blue-400" />
-                  <span>LinkedIn</span>
-                </a>
-                <a href={`mailto:${personalInfo.email}`} className="flex items-center justify-center gap-3 p-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl transition-all group">
-                  <Mail size={20} className="text-teal-400 group-hover:text-white" />
-                  <span>Email Me</span>
-                </a>
-              </div>
-              
-              <div className="text-slate-500 text-sm mt-8">
-                Based in {personalInfo.location} • {personalInfo.phone}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* LEFT: CERTIFICATION & EDUCATION (Oak Room) - Scrollable */}
-        <section className="absolute top-0 left-[-100vw] w-screen h-screen flex items-center justify-center bg-[#2b1d16] text-[#e7e5e4] overflow-hidden">
-          {/* Oak Room Texture/Lighting */}
-          <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#4a342a] via-[#2b1d16] to-[#1a110d] pointer-events-none"></div>
-          
-          {/* Scrollable Container */}
-          <div className="relative z-10 w-full h-full overflow-y-auto custom-scrollbar p-8 pt-24 pb-24 flex justify-center">
-            <div className="max-w-6xl w-full flex flex-col justify-start min-h-min">
-              <div className="text-center mb-10 shrink-0">
-                <h2 className="text-4xl font-serif font-bold text-[#d6c0a6] drop-shadow-md flex items-center justify-center gap-4">
-                  <Award className="text-[#eab308]" size={36} /> Hall of Achievements
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full pb-8">
-                
-                {/* Education Shelf */}
-                <div className="flex flex-col gap-8">
-                  <div className="flex items-center gap-3 text-[#d6c0a6] border-b border-[#5c4033] pb-2 mb-2">
-                    <BookOpen size={24} />
-                    <h3 className="text-2xl font-serif">Education & Certs</h3>
-                  </div>
-                  {/* Shelf Content */}
-                  <div className="space-y-6">
-                    {education.map((edu, idx) => (
-                      <div key={idx} className="relative bg-[#3e2b22] p-6 rounded shadow-xl border-b-4 border-[#1f1510] transform hover:-translate-y-1 transition-transform">
-                        <div className="absolute -top-3 -right-2 bg-[#f5f5f4] text-[#2b1d16] p-2 rounded-full shadow-lg">
-                          <Scroll size={20} />
+        {/* TOP: ABOUT ME (Clean Split) */}
+        <section className="absolute top-[-100vh] left-0 w-screen h-screen bg-white flex items-center justify-center overflow-hidden">
+            <div className="w-full h-full overflow-y-auto p-8 pt-24 pb-24 flex items-center justify-center">
+                <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-12 gap-12 items-start border-l border-zinc-100 pl-4 md:pl-8">
+                    
+                    {/* Left Column: Title & Bio */}
+                    <div className="md:col-span-5 space-y-8">
+                        <div>
+                            <span className="font-mono text-xs text-zinc-400 uppercase tracking-widest">01 / Profile</span>
+                            <h2 className="text-4xl font-bold text-zinc-900 mt-2 mb-6">About Me</h2>
+                            <div className="w-12 h-1 bg-zinc-900"></div>
                         </div>
-                        <h4 className="text-[#e7e5e4] font-bold text-lg font-serif">{edu.degree}</h4>
-                        <div className="text-[#a8a29e] text-sm italic">{edu.institution}</div>
-                        <div className="text-[#d6c0a6] text-xs mt-2 font-mono">{edu.year}</div>
-                        <p className="text-[#d1d5db] text-sm mt-2 border-t border-[#5c4033] pt-2">{edu.desc}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Trophies Shelf */}
-                <div className="flex flex-col gap-8">
-                  <div className="flex items-center gap-3 text-[#d6c0a6] border-b border-[#5c4033] pb-2 mb-2">
-                    <Trophy size={24} />
-                    <h3 className="text-2xl font-serif">Awards & Honors</h3>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {achievements.map((item, idx) => (
-                      <div key={idx} className="bg-[#3e2b22] p-4 rounded flex flex-col items-center text-center shadow-lg border-b-4 border-[#1f1510] hover:bg-[#4a342a] transition-colors group">
-                        <div className="mb-3 text-[#eab308] drop-shadow-md group-hover:scale-110 transition-transform">
-                          <Trophy size={32} />
+                        <p className="text-zinc-600 leading-relaxed text-lg">
+                            I specialize in building secure, intelligent systems. From <span className="font-semibold text-zinc-900 border-b border-zinc-300">Flutter</span> mobile apps to <span className="font-semibold text-zinc-900 border-b border-zinc-300">AI Agents</span> that detect misinformation, my work focuses on real-world impact.
+                        </p>
+                        <p className="text-zinc-600 leading-relaxed">
+                             With a strong background in Ethical Hacking and Math, I approach development with a security-first mindset.
+                        </p>
+                        <div className="flex items-center gap-3 text-sm font-mono text-zinc-500 pt-4">
+                            <MapPin size={16} /> {personalInfo.location}
                         </div>
-                        <h4 className="font-bold text-[#e7e5e4] text-sm">{item.title}</h4>
-                        <span className="text-[#a8a29e] text-xs mt-1">{item.award}</span>
-                      </div>
-                    ))}
-                  </div>
+                    </div>
+
+                    {/* Right Column: Skills Grid */}
+                    <div className="md:col-span-7 bg-zinc-50 p-8 border border-zinc-100">
+                         <div className="flex items-center justify-between mb-6 border-b border-zinc-200 pb-4">
+                            <h3 className="font-bold text-zinc-900 flex items-center gap-2"><Terminal size={18}/> Technical Arsenal</h3>
+                            <span className="text-xs font-mono text-zinc-400">STACK_V1.0</span>
+                         </div>
+                         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            {skills.map((skill, i) => (
+                                <div key={i} className="flex items-center gap-2 text-sm text-zinc-700 p-2 hover:bg-white hover:shadow-sm transition-all border border-transparent hover:border-zinc-200">
+                                    <Hash size={12} className="text-zinc-300" /> {skill}
+                                </div>
+                            ))}
+                         </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </section>
 
-        {/* RIGHT: PROJECTS (Tech Lab) - Scrollable */}
-        <section className="absolute top-0 left-[100vw] w-screen h-screen flex items-center justify-center bg-[#0f172a] overflow-hidden">
-           {/* Grid Background */}
-           <div className="absolute inset-0 z-0 opacity-10 pointer-events-none" 
-             style={{ 
-               backgroundImage: 'linear-gradient(to right, #0ea5e9 1px, transparent 1px), linear-gradient(to bottom, #0ea5e9 1px, transparent 1px)',
-               backgroundSize: '40px 40px'
-             }}>
-          </div>
-
-          <div className="w-full h-full overflow-y-auto custom-scrollbar p-8 pt-24 pb-24 flex justify-center relative z-10">
-            <div className="w-full max-w-6xl flex flex-col min-h-min">
-              
-              {/* Project Header - Centered */}
-              <div className="flex flex-col items-center justify-center mb-8 pb-4 border-b border-slate-700/50 shrink-0 space-y-6">
-                <h2 className="text-3xl md:text-4xl font-bold text-white flex items-center gap-3">
-                  <Cpu className="text-teal-500" /> Project Lab
-                </h2>
-                
-                <div className="flex gap-2 bg-slate-900 p-1 rounded-lg border border-slate-700 overflow-x-auto max-w-full custom-scrollbar">
-                  {[
-                    { id: 'mobile', label: 'Mobile App', icon: Smartphone },
-                    { id: 'cyber', label: 'CyberSec', icon: Shield },
-                    { id: 'ai', label: 'AI & ML', icon: Bot },
-                  ].map((tab) => (
-                    <button
-                      key={tab.id}
-                      onClick={() => setActiveProjectTab(tab.id)}
-                      className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all whitespace-nowrap ${
-                        activeProjectTab === tab.id 
-                        ? 'bg-teal-600 text-white shadow-lg' 
-                        : 'text-slate-400 hover:text-white hover:bg-slate-800'
-                      }`}
-                    >
-                      <tab.icon size={16} />
-                      <span className="hidden sm:inline">{tab.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Project Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-8">
-                {projectsData[activeProjectTab].map((project, index) => (
-                  <div 
-                    key={index} 
-                    className="bg-slate-900/80 backdrop-blur rounded-xl border border-slate-700 p-6 hover:border-teal-500/50 hover:shadow-2xl hover:shadow-teal-900/10 hover:-translate-y-1 transition-all duration-300 flex flex-col"
-                  >
-                    <div className="flex justify-between items-start mb-4">
-                      <div className={`
-                        px-2 py-1 rounded text-xs font-bold uppercase tracking-wide
-                        ${project.status === 'Live' ? 'bg-emerald-500/10 text-emerald-400' : ''}
-                        ${project.status === 'MVP' ? 'bg-amber-500/10 text-amber-400' : ''}
-                        ${project.status === 'Deployed' ? 'bg-blue-500/10 text-blue-400' : ''}
-                        ${project.status === 'Research' ? 'bg-purple-500/10 text-purple-400' : ''}
-                        ${project.status === 'Completed' ? 'bg-slate-700 text-slate-300' : ''}
-                        ${project.status === 'Professional' ? 'bg-cyan-500/10 text-cyan-400' : ''}
-                      `}>
-                        {project.status}
-                      </div>
-                      <ExternalLink size={18} className="text-slate-600 hover:text-white cursor-pointer" />
+        {/* BOTTOM: CONTACT (Minimalist Form/Card) */}
+        <section className="absolute top-[100vh] left-0 w-screen h-screen bg-zinc-100 flex items-center justify-center">
+            <div className="max-w-2xl w-full p-8">
+                <div className="bg-white p-12 shadow-sm border border-zinc-200 text-center space-y-8">
+                    <div className="inline-flex justify-center items-center w-16 h-16 bg-zinc-50 border border-zinc-100 rounded-full mb-4">
+                        <Mail size={24} className="text-zinc-900"/>
                     </div>
                     
-                    <h3 className="text-xl font-bold text-white mb-2">{project.title}</h3>
-                    <p className="text-slate-400 text-sm flex-grow mb-4 leading-relaxed">
-                      {project.desc}
-                    </p>
-                    
-                    <div className="pt-4 border-t border-slate-700">
-                      <span className="text-xs font-mono text-teal-400 block mb-1">Tech Stack</span>
-                      <span className="text-sm text-slate-300">{project.tech}</span>
+                    <div>
+                        <span className="font-mono text-xs text-zinc-400 uppercase tracking-widest">03 / Communication</span>
+                        <h2 className="text-3xl font-bold text-zinc-900 mt-2">Let's Collaborate</h2>
                     </div>
-                  </div>
-                ))}
-              </div>
+
+                    <div className="flex flex-col md:flex-row gap-4 justify-center w-full">
+                        <a href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="flex-1 py-4 px-6 border border-zinc-200 text-zinc-600 hover:border-zinc-900 hover:text-zinc-900 transition-colors flex items-center justify-center gap-2">
+                            <Linkedin size={18} /> LinkedIn
+                        </a>
+                         <a href={`mailto:${personalInfo.email}`} className="flex-1 py-4 px-6 bg-zinc-900 text-white hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2">
+                            <Mail size={18} /> Send Email
+                        </a>
+                    </div>
+
+                    <div className="pt-8 border-t border-zinc-100">
+                        <p className="font-mono text-xs text-zinc-400">{personalInfo.phone} • {personalInfo.location}</p>
+                    </div>
+                </div>
             </div>
-          </div>
+        </section>
+
+        {/* LEFT: EDUCATION (Timeline Style) */}
+        <section className="absolute top-0 left-[-100vw] w-screen h-screen bg-zinc-50 flex items-center justify-center overflow-hidden">
+            <div className="w-full h-full overflow-y-auto p-8 pt-24 pb-24 flex justify-center">
+                <div className="max-w-4xl w-full">
+                    <div className="mb-12 border-b border-zinc-200 pb-4 flex justify-between items-end">
+                         <div>
+                            <span className="font-mono text-xs text-zinc-400 uppercase tracking-widest">02 / History</span>
+                            <h2 className="text-3xl font-bold text-zinc-900 mt-2">Education & Honors</h2>
+                         </div>
+                         <Award className="text-zinc-300" size={32} />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+                        {/* Education Column */}
+                        <div className="space-y-8">
+                            <h3 className="text-lg font-bold text-zinc-900 flex items-center gap-2"><BookOpen size={18}/> Academic</h3>
+                            <div className="border-l-2 border-zinc-200 pl-6 space-y-10">
+                                {education.map((edu, idx) => (
+                                    <div key={idx} className="relative group">
+                                        <div className="absolute -left-[31px] top-1 w-4 h-4 bg-white border-2 border-zinc-300 rounded-full group-hover:border-zinc-900 transition-colors"></div>
+                                        <span className="font-mono text-xs text-zinc-400 block mb-1">{edu.year}</span>
+                                        <h4 className="font-bold text-zinc-900 text-lg leading-tight">{edu.degree}</h4>
+                                        <div className="text-zinc-600 text-sm mt-1">{edu.institution}</div>
+                                        <p className="text-zinc-500 text-xs mt-2">{edu.desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Awards Column */}
+                        <div className="space-y-8">
+                            <h3 className="text-lg font-bold text-zinc-900 flex items-center gap-2"><Trophy size={18}/> Recognition</h3>
+                            <div className="grid gap-4">
+                                {achievements.map((item, idx) => (
+                                    <div key={idx} className="flex items-start gap-4 p-4 border border-zinc-200 bg-white hover:border-zinc-900 transition-colors">
+                                        <div className="bg-zinc-50 p-2 rounded text-zinc-900">
+                                            {item.icon === 'trophy' ? <Trophy size={16}/> : item.icon === 'medal' ? <Award size={16}/> : <Scroll size={16}/>}
+                                        </div>
+                                        <div>
+                                            <h4 className="font-bold text-zinc-900 text-sm">{item.title}</h4>
+                                            <span className="text-zinc-500 text-xs">{item.award}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {/* RIGHT: PROJECTS (Technical Cards) */}
+        <section className="absolute top-0 left-[100vw] w-screen h-screen bg-zinc-900 text-zinc-50 flex items-center justify-center overflow-hidden">
+             {/* Dark Grid Background for this section only */}
+             <div className="absolute inset-0 z-0 opacity-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+
+            <div className="w-full h-full overflow-y-auto p-8 pt-24 pb-24 flex justify-center relative z-10">
+                <div className="w-full max-w-6xl">
+                    
+                    <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-zinc-800 pb-6 gap-6">
+                        <div>
+                             <span className="font-mono text-xs text-zinc-500 uppercase tracking-widest">04 / Portfolio</span>
+                             <h2 className="text-3xl font-bold text-white mt-2 flex items-center gap-3">Selected Works <Cpu className="text-zinc-600"/></h2>
+                        </div>
+                        
+                        {/* Tab Switcher */}
+                        <div className="flex gap-1 bg-zinc-950 p-1 rounded border border-zinc-800">
+                          {[
+                            { id: 'mobile', label: 'Mobile', icon: Smartphone },
+                            { id: 'cyber', label: 'Security', icon: Shield },
+                            { id: 'ai', label: 'AI/ML', icon: Bot },
+                          ].map((tab) => (
+                            <button
+                              key={tab.id}
+                              onClick={() => setActiveProjectTab(tab.id)}
+                              className={`flex items-center gap-2 px-4 py-2 text-xs font-mono uppercase transition-all ${
+                                activeProjectTab === tab.id 
+                                ? 'bg-zinc-800 text-white shadow-sm' 
+                                : 'text-zinc-500 hover:text-zinc-300'
+                              }`}
+                            >
+                              <tab.icon size={14} /> {tab.label}
+                            </button>
+                          ))}
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {projectsData[activeProjectTab].map((project, index) => (
+                            <div key={index} className="group bg-zinc-950 border border-zinc-800 p-6 hover:border-zinc-600 transition-all duration-300 flex flex-col h-full relative overflow-hidden">
+                                {/* Hover Effect */}
+                                <div className="absolute top-0 left-0 w-full h-1 bg-zinc-800 group-hover:bg-white transition-colors duration-300"></div>
+                                
+                                <div className="flex justify-between items-start mb-6">
+                                    <div className="font-mono text-[10px] uppercase tracking-widest px-2 py-1 border border-zinc-800 text-zinc-400 group-hover:text-white group-hover:border-zinc-600 transition-colors">
+                                        {project.status}
+                                    </div>
+                                    <ExternalLink size={16} className="text-zinc-600 group-hover:text-white transition-colors" />
+                                </div>
+                                
+                                <h3 className="text-xl font-bold text-white mb-3 group-hover:translate-x-1 transition-transform">{project.title}</h3>
+                                <p className="text-zinc-400 text-sm leading-relaxed mb-6 flex-grow">
+                                    {project.desc}
+                                </p>
+                                
+                                <div className="pt-4 border-t border-zinc-800">
+                                    <span className="text-xs text-zinc-500 font-mono">{project.tech}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
         </section>
 
       </div>
-
-      <style>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(30, 41, 59, 0.5); 
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #334155; 
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #475569; 
-        }
-        
-        @keyframes pulse-slow {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.7; }
-        }
-        .animate-pulse-slow {
-          animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-
-        @keyframes bounce-slight {
-          0%, 100% { transform: translate(0, 0); }
-          50% { transform: translate(0, -20%); }
-        }
-        .animate-bounce-slight {
-          animation: bounce-slight 2s infinite;
-        }
-      `}</style>
     </div>
   );
 }
